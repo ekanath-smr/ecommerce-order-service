@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.math.BigDecimal;
 
@@ -18,7 +19,7 @@ import java.math.BigDecimal;
                 @Index(name = "idx_order_id", columnList = "order_id")
         }
 )
-@Builder
+@SuperBuilder
 public class OrderItem extends BaseModel {
 
     // Product info from Product Service
@@ -31,7 +32,7 @@ public class OrderItem extends BaseModel {
     // Price snapshot (VERY IMPORTANT)
     @Column(nullable = false, precision = 12, scale = 2, updatable = false)
     @DecimalMin("0.0")
-    private BigDecimal priceSnapshot;
+    private BigDecimal unitPriceSnapshot;
 
     @Column(nullable = false)
     @Min(1)

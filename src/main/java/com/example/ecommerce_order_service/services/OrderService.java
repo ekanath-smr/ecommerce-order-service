@@ -10,9 +10,9 @@ import java.util.List;
 
 public interface OrderService {
     OrderResponseDto createOrder(CreateOrderRequestDto request, String idempotencyKey);
-    OrderResponseDto getOrderById(Long orderId);
+    OrderResponseDto getOrderById(Long orderId, Long userId);
     Page<OrderResponseDto> getOrdersByUserId(Long userId, Pageable pageable);
-    OrderResponseDto getOrderByIdempotencyKey(String key);
-    OrderResponseDto updateOrderStatus(Long orderId, OrderStatus status);
-    OrderResponseDto cancelOrder(Long orderId);
+    OrderResponseDto getOrderByIdempotencyKey(String key, Long userId);
+    OrderResponseDto updateOrderStatus(Long orderId, OrderStatus status, Long userId);
+    OrderResponseDto cancelOrder(Long orderId, Long userId);
 }

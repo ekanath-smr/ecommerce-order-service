@@ -2,6 +2,7 @@ package com.example.ecommerce_order_service.models;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -18,7 +19,7 @@ import java.util.List;
                 @Index(name = "idx_user_status", columnList = "userId, status")
         }
 )
-@Builder
+@SuperBuilder
 public class Order extends BaseModel {
 
     // From Auth Service
