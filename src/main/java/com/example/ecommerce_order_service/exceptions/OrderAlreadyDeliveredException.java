@@ -7,8 +7,8 @@ public class OrderAlreadyDeliveredException extends RuntimeException {
     private final Long orderId;
     private final String message;
     public OrderAlreadyDeliveredException(Long orderId) {
-        super("Order already completed: " + orderId);
+        super("Order with id=" + orderId +  ", already delivered.");
         this.orderId = orderId;
-        this.message = "Order already completed: " + orderId;
+        this.message = "Order with id=" + orderId +  ", already delivered.";
     }
 }

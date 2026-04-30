@@ -168,10 +168,10 @@ public class OrderServiceImpl implements OrderService {
         log.info("Updating order status orderId={}, newStatus={}, userId={}", orderId, newStatus, userId);
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new OrderNotFoundException(orderId));
-        if (!order.getUserId().equals(userId)) {
-            log.warn("Unauthorized status update attempt orderId={}", orderId);
-            throw new OrderAccessDeniedException(orderId);
-        }
+//        if (!order.getUserId().equals(userId)) {
+//            log.warn("Unauthorized status update attempt orderId={}", orderId);
+//            throw new OrderAccessDeniedException(orderId);
+//        }
         validateStatusTransition(order.getStatus(), newStatus);
         order.setStatus(newStatus);
         return OrderMapper.mapOrderToOrderResponseDto(orderRepository.save(order));

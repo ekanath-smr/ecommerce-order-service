@@ -33,6 +33,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
 
+        String path = request.getRequestURI();
+        String method = request.getMethod();
         String authHeader = request.getHeader("Authorization");
 
         // Skip if no Bearer token
@@ -47,7 +49,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             // Validate token and ensure no existing authentication
             if (jwtService.validateToken(token)
                     && SecurityContextHolder.getContext().getAuthentication() == null) {
-
+                String tokenType = jwtService.extractTokenType(token);
+                if (!"ACCESS".equals(tokenType)) {
+                    log.warn("Invalid token type | method={} | path={}", method, path);
+                    filterChain.doFilter(request, response);
+                    return;
+                }
                 String username = jwtService.extractUsername(token);
                 Long userId = jwtService.extractUserId(token);
 

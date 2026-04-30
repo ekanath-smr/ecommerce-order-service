@@ -2,9 +2,12 @@ package com.example.ecommerce_order_service.advices;
 
 import com.example.ecommerce_order_service.dtos.response.ErrorResponseDto;
 import com.example.ecommerce_order_service.exceptions.*;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.annotation.*;
@@ -60,7 +63,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(OrderAlreadyDeliveredException.class)
     public ResponseEntity<ErrorResponseDto> handleAlreadyDelivered(OrderAlreadyDeliveredException ex) {
         log.warn("Order already delivered: {}", ex.getMessage());
-        return buildResponse(HttpStatus.CONFLICT, ex.getMessage());
+        return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
     @ExceptionHandler(OrderStatusTransitionException.class)
@@ -98,6 +101,24 @@ public class GlobalExceptionHandler {
                 .forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
 
         return buildResponse(HttpStatus.BAD_REQUEST, "Validation failed", errors);
+    }
+
+    // =========================
+    // Security Exception
+    // =========================
+
+    @ExceptionHandler(AuthorizationDeniedException.class)
+    public ResponseEntity<ErrorResponseDto> handleAuthDenied(
+            AuthorizationDeniedException ex, HttpServletRequest request) {
+        log.warn("Authorization denied at {} - {}", request.getRequestURI(), ex.getMessage());
+        return buildResponse(HttpStatus.BAD_REQUEST, "Validation failed. You do not have permission to access this resource.");
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ErrorResponseDto> handleAccessDenied(
+            AccessDeniedException ex, HttpServletRequest request) {
+        log.warn("Access denied at {} - {}", request.getRequestURI(), ex.getMessage());
+        return buildResponse(HttpStatus.FORBIDDEN, "Forbidden. Access denied.");
     }
 
     // =========================
