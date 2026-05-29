@@ -40,6 +40,7 @@ public class OrderServiceImpl implements OrderService {
     // CREATE ORDER
     // =========================
     // “This is a Synchronous compensating transaction pattern, but ideally this should be implemented using Saga pattern (orchestrated/event-driven).”
+    // Synchronous orchestrated Saga-style implementation using compensating transactions.
     // Saga -> persistent state transitions and asynchronous communication to ensure reliability and fault tolerance
     @Override
     @Transactional
